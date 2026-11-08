@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movies</title>
+</head>
+
+<body>
+
+<h1>List of Movies</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="movie: ${movies}">
+            <td th:text="${movie.name}"></td>
+            <td th:text="${movie.year}"></td>
+            <td th:text="${movie.director}"></td>
+            <td>
+                <form th:action="@{/movies/delete/{id}(id=${movie.id})}" method="post"
+                      onsubmit="return confirm('Delete this movie?');">
+                <button type="submit">Delete</button>
+                </form>
+            </td>
+            <td>
+                <a th:href="@{/movies/editor/{id}(id=${movie.id})}">
+                     edit
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+        <a th:href="@{/movies/new}">
+            add new movie
+        </a>
+</body>

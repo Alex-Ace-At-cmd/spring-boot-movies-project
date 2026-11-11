@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <head>
     <title>Movies</title>
 </head>
 
 <body>
+
+    <div sec:authorize="isAuthenticated()">
+        <span>
+            User:
+            <b><span sec:authentication="name"></span></b>
+        </span>
+        <form th:action="@{/logout}"
+              method="post"
+              style="display:inline; margin-left:10px">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <button type="submit">Logout</button>
+        </form>
+    </div>
 
 <h1>List of Movies</h1>
 
@@ -14,8 +28,10 @@
                 <th>Name</th>
                 <th>Year</th>
                 <th>Director</th>
-                <th>Delete</th>
-                <th>Edit</th>
+                <span sec:authorize="hasRole('ADMIN')">
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </span>
             </tr>
         </thead>
         <tbody>
@@ -23,21 +39,33 @@
             <td th:text="${movie.name}"></td>
             <td th:text="${movie.year}"></td>
             <td th:text="${movie.director}"></td>
-            <td>
-                <form th:action="@{/movies/delete/{id}(id=${movie.id})}" method="post"
-                      onsubmit="return confirm('Delete this movie?');">
-                <button type="submit">Delete</button>
-                </form>
-            </td>
-            <td>
-                <a th:href="@{/movies/editor/{id}(id=${movie.id})}">
-                     edit
-                </a>
-            </td>
+            <span sec:authorize="hasRole('ADMIN')">
+                <td>
+                    <span sec:authorize="hasRole('ADMIN')">
+
+                        <form th:action="@{/movies/delete/{id}(id=${movie.id})}" method="post"
+                              onsubmit="return confirm('Delete this movie?');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit">Delete</button>
+                        </form>
+
+                    </span>
+
+                </td>
+                <td>
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/movies/editor/{id}(id=${movie.id})}">
+                             edit
+                        </a>
+                    </div>
+                </td>
+            </span>
         </tr>
         </tbody>
     </table>
-        <a th:href="@{/movies/new}">
-            add new movie
-        </a>
+        <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/movies/new}">
+                add new movie
+            </a>
+        </div>
 </body>

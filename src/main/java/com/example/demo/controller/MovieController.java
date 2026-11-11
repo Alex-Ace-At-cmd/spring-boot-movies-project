@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.MovieServiceImpl;
+
 import jakarta.validation.Valid;
 import com.example.demo.model.Movie;
 import com.example.demo.service.MovieService;
@@ -19,7 +19,7 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String movies(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
         model.addAttribute("newMovie", new Movie());
@@ -66,7 +66,6 @@ public class MovieController {
         return "redirect:/movies";
     }
 
-
-
-
 }
+
+

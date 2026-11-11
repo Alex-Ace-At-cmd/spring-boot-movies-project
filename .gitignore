@@ -40,7 +40,7 @@ build/
 .classpath
 .project
 .settings/
-config/
 
 
-/src/main/java/com/example/demo/config/
+
+

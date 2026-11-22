@@ -1,14 +1,11 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import org.jspecify.annotations.Nullable;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +20,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

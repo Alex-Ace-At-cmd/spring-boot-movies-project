@@ -4,6 +4,7 @@ import com.example.demo.model.Movie;
 import com.example.demo.repository.MovieRepository;
 import jakarta.transaction.Transactional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class MovieServiceImpl implements MovieService{
 
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveMovie(Movie movie) {
         movieRepository.save(movie);
     }

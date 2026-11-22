@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/movies")
+//@RequestMapping("/admin")
 public class MovieController {
 
     private final MovieService movieService;
@@ -19,7 +19,7 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public String movies(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
         model.addAttribute("newMovie", new Movie());

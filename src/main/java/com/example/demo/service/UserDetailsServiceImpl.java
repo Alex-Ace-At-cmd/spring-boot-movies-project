@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -21,13 +22,18 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     final private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserDetailsServiceImpl(UserRepository userRepository,
+                                  PasswordEncoder passwordEncoder,
+                                  RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
-    private final PasswordEncoder passwordEncoder;
+
 
     public User registerUser(String username, String rawPassword) {
         if (userRepository.existsByUsername(username)) {
@@ -36,7 +42,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setRoles(Set.of(new Role("ROLE_USER")));
+        user.setRoles(Set.of(roleRepository.findByRole("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Роль ROLE_USER не найдена"))));
         return userRepository.save(user);
     }
 

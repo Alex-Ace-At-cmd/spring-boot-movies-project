@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-//@RequestMapping("/admin")
+@RequestMapping("/admin")
 public class MovieController {
 
     private final MovieService movieService;
@@ -19,7 +19,7 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping
     public String movies(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
         model.addAttribute("newMovie", new Movie());
@@ -29,7 +29,7 @@ public class MovieController {
     @PostMapping("/delete/{id}")
     public String deleteMovie(@PathVariable("id") Long id) {
         movieService.removeMovieById(id);
-        return "redirect:/movies";
+        return "redirect:/admin";
     }
 
     @GetMapping("/new")
@@ -45,7 +45,7 @@ public class MovieController {
             return "add";
         }
         movieService.saveMovie(movies);
-        return "redirect:/movies";
+        return "redirect:/admin";
     }
 
 
@@ -63,7 +63,7 @@ public class MovieController {
             return "edit";
         }
         movieService.updateMovie(movies);
-        return "redirect:/movies";
+        return "redirect:/admin";
     }
 
 }

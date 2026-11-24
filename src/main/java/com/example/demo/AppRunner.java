@@ -37,11 +37,13 @@ public class AppRunner implements CommandLineRunner {
 
         if (userRepository.findByUsername("admin").isEmpty()) {
             userRepository.save(new User("admin", passwordEncoder.encode("1234qwerty"),
+                   "admin@mail.com",
                     new HashSet<>(Set.of(adminRole))));
             System.out.println("Базовая роль админа создана!");
 
         } if (userRepository.findByUsername("user").isEmpty()) {
             userRepository.save(new User("user", passwordEncoder.encode("1234qwerty"),
+                    "user@mail.com",
                     new HashSet<>(Set.of(userRole))));
             System.out.println("Базовая роль юзера создана!");
         }

@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
@@ -28,7 +29,6 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -39,17 +39,20 @@ public class User implements UserDetails {
         return roles;
     }
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", unique = true)
+    @NotBlank(message = "Fill in the input field")
     private String username;
 
     @Column(name = "password")
     private String password;
 
     @Column(name = "email")
+    @NotBlank(message = "Fill in the input field")
     private String email;
 
     @Override
@@ -61,6 +64,12 @@ public class User implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {this.id = id;}
 
     public String getEmail() {
         return email;

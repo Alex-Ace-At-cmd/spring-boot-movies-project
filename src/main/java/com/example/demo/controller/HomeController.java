@@ -11,8 +11,5 @@ public class HomeController {
         return "redirect:/user";
     }
 
-    @GetMapping("/user")
-    public String userPage() {
-        return "user";
-    }
+
 }

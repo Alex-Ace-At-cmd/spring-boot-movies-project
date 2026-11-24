@@ -21,7 +21,7 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    final private UserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
@@ -35,13 +35,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
 
-    public User registerUser(String username, String rawPassword) {
+    public User registerUser(String username, String rawPassword, String email) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Пользователь уже существует");
         }
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setEmail(email);
         user.setRoles(Set.of(roleRepository.findByRole("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Роль ROLE_USER не найдена"))));
         return userRepository.save(user);

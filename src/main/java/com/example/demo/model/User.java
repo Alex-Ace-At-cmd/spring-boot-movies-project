@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name", unique = true)
-    @NotBlank(message = "Fill in the input field")
+    @NotBlank(message = "Fill in the input field / Input error")
     private String username;
 
     @Column(name = "password")
@@ -55,6 +55,17 @@ public class User implements UserDetails {
     @Column(name = "email")
     @NotBlank(message = "Fill in the input field")
     private String email;
+
+    @Transient
+    private Set<Long> selectedRoleIds = new HashSet<>();
+
+    public Set<Long> getSelectedRoleIds() {
+        return selectedRoleIds;
+    }
+
+    public void setSelectedRoleIds(Set<Long> selectedRoleIds) {
+        this.selectedRoleIds = selectedRoleIds;
+    }
 
     @Override
     public String getPassword() {

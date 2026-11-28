@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.model.UserForm;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +50,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    public User registerUserByAdmin(String username, String rawPassword, String email, Set<Role> roles) {
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("Пользователь уже существует");
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setEmail(email);
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
+
 
     public Optional<User> findUserByName(String username) {
         return userRepository.findByUsername(username);
@@ -72,6 +86,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void existUserById(Long id) {
         userRepository.existsById(id);
+    }
+
+    public void updateUser(Long id, User user) {
+        User userUpdate = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userUpdate.setUsername(user.getUsername());
+        userUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+        userUpdate.setEmail(user.getEmail());
+
+        userUpdate.setRoles(user.getRoles());
+
+        userRepository.save(userUpdate);
+
     }
 
 
